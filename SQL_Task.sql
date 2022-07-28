@@ -68,33 +68,19 @@ SELECT * FROM EMPLOYEES;
 
 --------------------------------------------Task Queries--------------------------------------------------------------------
 /*
-
 1. Given SQL query will execute successfully: TRUE/FALSE SELECT last_name, job_id, salary AS Sal FROM employees; -------> TRUE
-
 2. Identity errors in the following statement: SELECT employee_id, last_name, sal*12 ANNUAL SALARY FROM employees; --------> NOT Using AS keword, sal is invelid tocken
-
 3. Write a query to determine the structure of the table 'DEPARTMENTS'
-
 4. Write a query to determine the unique Job IDs from the EMPLOYEES table.
-
 5. Write a query to display the employee number, lastname, salary (oldsalary), salary increased by 15.5% name it has NewSalary and subtract the (NewSalary from OldSalary) name the column as Increment.
-
 6. Write a query to display the minimum, maximum, sum and average salary for each job type.
-
 7. The HR department needs to find the names and hire dates of all employees who were hired before their managers, along with their managers’ names and hire dates.
-
 8. Create a report for the HR department that displays employee last names, department numbers, and all the employees who work in the same department as a given employee.
-
 9. Find the highest, lowest, sum, and average salary of all employees. Label the columns Maximum, Minimum, Sum, and Average, respectively. Round your results to the nearest whole number.
-
 10. Create a report that displays list of employees whose salary is more than the salary of any employee from department 60.
-
 11. Create a report that displays last name and salary of every employee who reports to King(Use any manager name instead of King).
-
 12. Write a query to display the list of department IDs for departments that do not contain the job Id ST_CLERK(Add this job ST_CLERK to Job table). Use SET Operator for this query
-
 13. Write a query to display the list of employees who work in department 50 and 80. Show employee Id, job Id and department Id by using set operators. - Add 50 and 80 department Id to department table
-
 */
 -------------------------------------Task 1---------------------------------------------------------------
 SELECT last_name, job_id, salary AS Sal 
@@ -126,8 +112,9 @@ WHERE A.Hire_Date < B.Hire_Date;
 -------------------------------------Task 8---------------------------------------------------------------
 GO
 CREATE VIEW Employee_Report AS
-SELECT DISTINCT A.Last_Name, A.Department_ID AS Same_Dept
-FROM EMPLOYEES A INNER JOIN EMPLOYEES B ON A.Department_ID = B.Department_ID;
+SELECT DISTINCT CONCAT(A.First_Name, ' ', A.Last_Name) AS Emp_Name, A.Department_ID AS Same_Dept, CONCAT(B.First_Name, ' ', B.Last_Name) AS Other_Emp
+FROM EMPLOYEES A INNER JOIN EMPLOYEES B ON A.Department_ID = B.Department_ID
+WHERE B.Last_Name != A.Last_Name;
 
 GO
 SELECT * FROM Employee_Report;
@@ -165,7 +152,4 @@ WHERE Department_ID != 8;
 
 -------------------------------------Task 13---------------------------------------------------------------
 SELECT Employee_ID, Job_ID, Department_ID FROM EMPLOYEES
-WHERE Department_ID = 4
-UNION
-SELECT Employee_ID, Job_ID, Department_ID FROM EMPLOYEES
-WHERE Department_ID = 3;
+WHERE Department_ID IN (1, 3, 4) ORDER BY Department_ID;
