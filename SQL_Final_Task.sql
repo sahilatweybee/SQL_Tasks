@@ -234,3 +234,55 @@ INNER JOIN movie_genres ON movie.mov_id = movie_genres.mov_id
 INNER JOIN genres ON movie_genres.gen_id = genres.gen_id;
 
 --------------------------------------------Task 9----------------------------------------------------------------------
+SELECT movie.mov_title, movie.mov_year, movie.mov_dt_rel, movie.mov_time, director.dir_fname, director.dir_lname FROM movie
+INNER JOIN movie_direction ON movie.mov_id = movie_direction.mov_id
+INNER JOIN director ON movie_direction.dir_id = director.dir_id 
+WHERE movie.mov_year <= 1988
+ORDER BY movie.mov_year DESC, movie.mov_dt_rel DESC
+
+--------------------------------------------Task 10---------------------------------------------------------------------
+SELECT gen_title, AVG(mov_time) AS avg_mov_time, COUNT(movie_genres.mov_id) AS number_of_mov FROM movie	
+INNER JOIN movie_genres ON movie.mov_id =  movie_genres.mov_id
+INNER JOIN genres ON movie_genres. gen_id = genres.gen_id
+GROUP BY gen_title;
+
+--------------------------------------------Task 11---------------------------------------------------------------------
+SELECT movie.mov_title, movie.mov_year, director.dir_fname, director.dir_lname, actor.act_fname, actor.act_lname, movie_cast.role FROM movie	
+INNER JOIN movie_direction ON movie.mov_id = movie_direction.mov_id
+INNER JOIN director ON movie_direction.dir_id = director.dir_id
+INNER JOIN movie_cast ON movie.mov_id = movie_cast.mov_id
+INNER JOIN actor ON movie_cast.act_id= actor.act_id
+WHERE mov_time IN (SELECT mIN(mov_time) FROM movie);
+
+--------------------------------------------Task 12---------------------------------------------------------------------
+SELECT mov_year, rating.rev_stars FROM movie 
+INNER JOIN rating ON movie.mov_id = rating.mov_id
+WHERE rating.rev_stars BETWEEN 3 AND 4
+ORDER BY movie.mov_year;
+
+--------------------------------------------Task 13---------------------------------------------------------------------
+SELECT reviewer.rev_name, movie.mov_title, rating.rev_stars FROM movie
+INNER JOIN rating ON movie.mov_id = rating.mov_id 
+INNER JOIN reviewer ON rating.rev_id = reviewer.rev_id 
+ORDER BY reviewer.rev_name, movie.mov_title, rating.rev_stars;
+
+--------------------------------------------Task 14---------------------------------------------------------------------
+SELECT movie.mov_title, MAX(rating.rev_stars) AS Max_Stars FROM movie
+INNER JOIN rating ON movie.mov_id = rating.mov_id
+WHERE rating.num_o_ratings IS NOT NULL
+GROUP BY movie.mov_title;
+
+--------------------------------------------Task 15---------------------------------------------------------------------
+SELECT movie.mov_title, director.dir_fname, director.dir_lname, rating.rev_stars FROM movie
+INNER JOIN movie_direction ON movie.mov_id = movie_direction.mov_id 
+INNER JOIN director ON movie_direction.dir_id = director.dir_id
+INNER JOIN rating ON movie.mov_id = rating.mov_id
+WHERE rating.rev_stars IS NOT NULL;
+
+--------------------------------------------Task 16---------------------------------------------------------------------
+--Write a SQL query to find the movie title, actor first and last name, and the role for those movies where one or more actors acted in two or more movies. 
+SELECT movie.mov_title, actor.act_fname, actor.act_lname, movie_cast.role FROM movie
+INNER JOIN movie_cast ON movie.mov_id = movie_cast.mov_id 
+INNER JOIN actor ON movie_cast.act_id = actor.act_id
+WHERE movie_cast.act_id IN (SELECT act_id FROM movie_cast 
+GROUP BY act_id HAVING COUNT(act_id) > 1);

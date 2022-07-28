@@ -153,3 +153,14 @@ WHERE Department_ID != 8;
 -------------------------------------Task 13---------------------------------------------------------------
 SELECT Employee_ID, Job_ID, Department_ID FROM EMPLOYEES
 WHERE Department_ID IN (1, 3, 4) ORDER BY Department_ID;
+
+-------------------------------------Getting day/month/year from date--------------------------------------
+SELECT DAY(Hire_Date) FROM EMPLOYEES;
+SELECT MONTH(Hire_Date) FROM EMPLOYEES;
+SELECT YEAR(Hire_Date) FROM EMPLOYEES;
+
+-------------------------------------Using EXISTS to check customer placed an order or not-----------------
+USE w3schools;
+
+SELECT CustomerID FROM customers 
+WHERE EXISTS (SELECT CustomerID FROM orders WHERE CustomerID = customers.CustomerID);
